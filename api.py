@@ -2,9 +2,13 @@
 import os
 import logging
 import requests
+from dotenv import load_dotenv, find_dotenv
 
 APP_ID = os.getenv("APP_ID")
 APP_SECRET = os.getenv("APP_SECRET")
+VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
+ENCRYPT_KEY = os.getenv("ENCRYPT_KEY")
+LARK_HOST = os.getenv("LARK_HOST")
 
 # const
 TENANT_ACCESS_TOKEN_URI = "/open-apis/auth/v3/tenant_access_token/internal"
@@ -12,10 +16,10 @@ MESSAGE_URI = "/open-apis/im/v1/messages"
 
 
 class MessageApiClient(object):
-    def __init__(self, app_id, app_secret, lark_host):
-        self._app_id = app_id
-        self._app_secret = app_secret
-        self._lark_host = lark_host
+    def __init__(self):
+        self._app_id = APP_ID
+        self._app_secret = APP_SECRET
+        self._lark_host = LARK_HOST
         self._tenant_access_token = ""
 
     @property

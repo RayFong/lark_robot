@@ -6,28 +6,17 @@ import random
 import logging
 import requests
 import re
-from api import MessageApiClient
+from api import MessageApiClient, VERIFICATION_TOKEN, ENCRYPT_KEY
 from event import MessageReceiveEvent, UrlVerificationEvent, EventManager
 from flask import Flask, jsonify
-from dotenv import load_dotenv, find_dotenv
 from sim import *
 
 from guess_idiom import IdiomGuesser
 
-# load env parameters form file named .env
-load_dotenv(find_dotenv())
-
 app = Flask(__name__)
 
-# load from env
-APP_ID = os.getenv("APP_ID")
-APP_SECRET = os.getenv("APP_SECRET")
-VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
-ENCRYPT_KEY = os.getenv("ENCRYPT_KEY")
-LARK_HOST = os.getenv("LARK_HOST")
-
 # init service
-message_api_client = MessageApiClient(APP_ID, APP_SECRET, LARK_HOST)
+message_api_client = MessageApiClient()
 event_manager = EventManager()
 
 repo = QuestionRepository()
