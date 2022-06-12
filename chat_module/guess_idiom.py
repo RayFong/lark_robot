@@ -1,4 +1,5 @@
 import json, random
+import re
 
 def onset_num(word):
     for c in ['zh', 'ch', 'sh']:
@@ -107,6 +108,72 @@ class IdiomGuesser:
         self.nextCursor += self.candidate_num
         return [r[0] for r in result]
 
+
+idiom_hint = '请输入猜的成语及结果，如\\n 一见钟情, 331 133 331 331'
+def render_guess_result(result, new_word, candidates=None):
+    if len(result) == 0:
+        if new_word:
+            return '小机器人词库不足了，请输入`猜成语`重新开始吧'
+        else:
+            return '没有更多候选了~~~\\n' + idiom_hint
+
+    if len(result) == 1 and new_word:
+        return f'答案是: {result[0]}，猜成语游戏结束。你可以输入`猜成语`重新开始'
+
+    total = ''
+    if candidates:
+        total = f'共有{len(candidates)}个, '
+
+    if len(result) < 30: 
+        return total + f'推荐{len(result)}个: [' + ', '.join(result) + ']\\n' + idiom_hint
+    else:
+        return total + '推荐30个: [' + ', '.join(result) + ']\\n 输入`查看更多`，或者,' + idiom_hint
+
+
+def idiom_guess(guesser, content):
+    if content == '猜成语':
+        guesser.startNewGuess()
+        return True, idiom_hint
+
+    if content == '查看更多':
+        result = guesser.moreCandidate()
+        return True, render_guess_result(result, False, guesser.lastCandidate)
+
+    fields = re.split(r',|，', content)
+    if len(fields) != 2:
+        return False, '输入格式错误,' + idiom_hint
+
+    guess_idiom, guess_result = fields[0].strip(), fields[1].strip()
+    if len(guess_idiom) == 4 and guess_idiom in guesser.idiomMap:
+        guess_idiom = guesser.idiomMap[guess_idiom]
+
+    if len(guess_idiom.split()) != 4 or len(guess_result.split()) != 4:
+        return False, '输入格式错误,' + idiom_hint
+
+    result = guesser.guess(guess_idiom, guess_result)
+    return True, render_guess_result(result, True, guesser.lastCandidate)
+
+
+class GuessIdiomModule:
+    def __init__(self):
+        import os
+        f_dir = os.path.dirname(__file__)
+        idiom_path = os.path.join(f_dir, '../data/idioms.json')
+        self.guesser = IdiomGuesser(idiom_path, 30)
+
+    def Handle(self, content, **kvargs):
+        if content == '猜成语':
+            self.guesser.startNewGuess()
+            return idiom_hint
+        
+        if self.guesser.isGuessing():
+            match, result = idiom_guess(self.guesser, content)
+            if match:
+                return result
+            else:
+                return '当前还在猜成语呢, ' + result
+
+        return None
 
 if __name__ == '__main__':
     with open('./idioms_new.json') as fp:
