@@ -4,6 +4,8 @@ import logging
 import requests
 from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv())
+
 APP_ID = os.getenv("APP_ID")
 APP_SECRET = os.getenv("APP_SECRET")
 VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
@@ -81,6 +83,18 @@ class MessageApiClient(object):
         req_body = {'msg_type': 'text', 'content': content}
         resp = requests.post(url=url, headers=headers, json=req_body)
         MessageApiClient._check_error_response(resp)
+
+
+    def list_bittable_records(self, app_token, table_id):
+        self._authorize_tenant_access_token()
+        url = f'{self._lark_host}/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records'
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + self.tenant_access_token,
+        }
+        resp = requests.get(url=url, headers=headers)
+        MessageApiClient._check_error_response(resp)
+        return resp.json()
 
 
     def _authorize_tenant_access_token(self):
