@@ -1,5 +1,15 @@
 #!/usr/bin/env python3.8
 import json
+import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
+APP_ID = os.getenv("APP_ID")
+APP_SECRET = os.getenv("APP_SECRET")
+VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
+ENCRYPT_KEY = os.getenv("ENCRYPT_KEY")
+LARK_HOST = os.getenv("LARK_HOST")
+WEATHER_ROBOT_URL = os.getenv("WEATHER_ROBOT_URL")
 
 class Obj(dict):
     def __init__(self, d):

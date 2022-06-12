@@ -2,6 +2,7 @@ import requests
 import re
 import os
 from itertools import compress
+from utils import *
 
 url = 'https://sspai.com/feed'
 raw = requests.get(url).text
@@ -39,4 +40,4 @@ msg = {"msg_type": "post", "content": {"post": {
 }
 
 print(msg)
-requests.post('https://open.feishu.cn/open-apis/bot/v2/hook/a3829405-a8b2-4904-a72a-01c41e800122', json=msg)
+requests.post(WEATHER_ROBOT_URL, json=msg)

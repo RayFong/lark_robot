@@ -2,6 +2,7 @@
 import requests
 from bs4 import BeautifulSoup as bs
 from api import MessageApiClient
+from utils import *
 
 cookie='_zap=2617c044-450d-4db5-9e59-7f7f8bb8c3bf; d_c0="ACCWaGUdABGPTqFQBK7F9x_2OSrc4a7SAvs=|1584845482"; _ga=GA1.2.25523070.1584845506; _xsrf=c4754411-05b9-4c0b-8d4e-cd6620086905; Hm_lvt_98beee57fd2ef70ccdd5ca52b9740c49=1641654840,1641693447,1641778785,1642213577; captcha_session_v2="2|1:0|10:1642213577|18:captcha_session_v2|88:SzJMdnNEbTVXWGNkMVBlRnRabElpOGl1ZDlQbFZVcGZEbzk0UHRLZ01GOTh1LzVsT3dNSkJ0Tm96bHdiVDBkcg==|2c308b91149bcd767048f46eea73780f1c51a6fd2531171114b8a514792f2156"; _gid=GA1.2.1608353969.1642933592; Hm_lpvt_98beee57fd2ef70ccdd5ca52b9740c49=1642934699; KLBRSID=0a401b23e8a71b70de2f4b37f5b4e379|1642934777|1642933589; _gat=1'
 
@@ -68,11 +69,11 @@ soup = bs(r.content)
 all = soup.find_all('a',class_='link-button')
 l = [[a['href'], a.find('span').text] for a in all ]
 url_xiache = [ x[0] for x in l if '瞎扯' in x[1]][0]
-with open('./xiache.txt','r') as f:
+with open('/tmp/xiache.txt','r') as f:
     last_line = f.readline()
 
 if (url_xiache != last_line):
-    with open('./xiache.txt','w') as f:
+    with open('/tmp/xiache.txt','w') as f:
         f.write(url_xiache)
 
     url_xiache_s = 'https://daily.zhihu.com{}'.format(url_xiache)
@@ -101,6 +102,6 @@ if (url_xiache != last_line):
                     }
             }
     }
-    resp = requests.post('https://open.feishu.cn/open-apis/bot/v2/hook/a3829405-a8b2-4904-a72a-01c41e800122', json=msg)
+    resp = requests.post(WEATHER_ROBOT_URL, json=msg)
     print(resp.content)
 

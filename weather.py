@@ -1,5 +1,6 @@
 import requests
 import re
+from utils import *
 
 url = 'https://tianqi.moji.com/today/china/shanghai/yangpu-district'
 raw = requests.get(url).text
@@ -64,4 +65,4 @@ msg = {"msg_type": "post", "content": {"post": {
 }
 
 print(msg)
-requests.post('https://open.feishu.cn/open-apis/bot/v2/hook/f98a3cd9-25a7-4bc1-800b-12f82729ce08', json=msg)
+requests.post(WEATHER_ROBOT_URL, json=msg)
