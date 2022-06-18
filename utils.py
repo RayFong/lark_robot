@@ -10,6 +10,7 @@ VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
 ENCRYPT_KEY = os.getenv("ENCRYPT_KEY")
 LARK_HOST = os.getenv("LARK_HOST")
 WEATHER_ROBOT_URL = os.getenv("WEATHER_ROBOT_URL")
+SWIM_ROBOT_URL = os.getenv("SWIM_ROBOT_URL")
 
 class Obj(dict):
     def __init__(self, d):

@@ -102,6 +102,6 @@ if (url_xiache != last_line):
                     }
             }
     }
-    resp = requests.post(WEATHER_ROBOT_URL, json=msg)
+    resp = requests.post(SWIM_ROBOT_URL, json=msg)
     print(resp.content)
 
