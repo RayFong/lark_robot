@@ -96,6 +96,20 @@ class MessageApiClient(object):
         MessageApiClient._check_error_response(resp)
         return resp.json()
 
+    def new_bittable_records(self, app_token, table_id, content):
+        self._authorize_tenant_access_token()
+        url = f'{self._lark_host}/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records'
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + self.tenant_access_token,
+        }
+
+        req_body = {"fields":content}
+        print(self.tenant_access_token, req_body)
+        
+        resp = requests.post(url=url, headers=headers, json=req_body)
+        MessageApiClient._check_error_response(resp)
+        return resp.json()
 
     def _authorize_tenant_access_token(self):
         # get tenant_access_token and set, implemented based on Feishu open api capability. doc link: https://open.feishu.cn/document/ukTMukTMukTM/ukDNz4SO0MjL5QzM/auth-v3/auth/tenant_access_token_internal

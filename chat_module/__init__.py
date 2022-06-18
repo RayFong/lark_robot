@@ -3,5 +3,6 @@ from . import guess_idiom
 
 Modules = [
     guess_idiom.GuessIdiomModule(),
-    chatter.ChatterModule()
+    chatter.ChatterModule(),
+    douban.DoubanModule()
 ]
