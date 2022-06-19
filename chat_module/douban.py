@@ -47,38 +47,6 @@ def douban_info(url):
     return content, pic_url
 
 
-
-class NewMovie:
-    def __init__(self):
-        self.adding = False
-    
-    def isAdding(self):
-        self.adding = True
-        return self.adding
-
-    def add(self, url):
-        self.movie_content = douban_info(url)
-        return self.movie_content
-
-
-class DoubanModule2:
-    def __init__(self):
-        self.m = NewMovie()
-
-
-    def Handle(self, content, **kvargs):
-        if content == '甜甜看片':
-            self.m.isAdding()
-            return douban_hint
-        
-        if self.m.adding:
-            c = MessageApiClient()
-            c.new_bittable_records('bascn8PCizNlokom09WfnN89O3b','tblMha0FYWopst7m', self.m.add(content))
-            return '已添加'
-        
-        return None
-
-
 class DoubanModule:
     def __init__(self) -> None:
         pass
@@ -90,7 +58,7 @@ class DoubanModule:
             detail, img_url = douban_info(url)
             detail['海报']=[{"file_token": c.upload_medias(img_url)}]
             c.new_bittable_records('bascn8PCizNlokom09WfnN89O3b','tblMha0FYWopst7m', detail)
-            return '已添加'
+            return f'已添加《{detail["片名"]}》'
  
             
 
