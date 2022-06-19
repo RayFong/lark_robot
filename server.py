@@ -67,7 +67,7 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
         logging.warn("Other types of messages have not been processed yet")
         return jsonify()
 
-    thr = threading.Thread(target=processReceiveEvent, args=req_data)
+    thr = threading.Thread(target=processReceiveEvent, args=(req_data,))
     thr.start()
     return jsonify()
 
