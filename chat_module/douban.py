@@ -9,6 +9,18 @@ douban_hint = '请输入豆瓣电影的链接。'
 headers = {
     'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.39',
 }
+
+
+def upload_image_to_feishu(image_path: str):
+    try:
+        data = requests.get(image_path).content
+        with open('/tmp/sample.jpg', 'wb') as fp:
+            fp.write(data)
+        return message_api_client.upload_image('/tmp/sample.jpg')
+    except:
+        return 'img_v2_868f1042-efb9-4973-93db-9c71f1015a6g'
+
+
 def douban_info(url):
     r = requests.get(url, headers = headers).content
     soup = BeautifulSoup(r, 'html.parser')
@@ -19,6 +31,8 @@ def douban_info(url):
     director = info.span.contents[-1].a.contents[0]
     actors ='，'.join([x.contents[0] for x in info.find('span', class_='actor').find_all('a')])
     rating = soup.strong.contents[0]
+    pic_url = soup.find('a', class_ = 'nbgnbg').contents[1]['src']
+
 
     content = {
         "标签": genre_list,
@@ -28,15 +42,10 @@ def douban_info(url):
         "导演": director,
         "主演": actors,
         "豆瓣评分": float(rating),
-    #     "海报": [{'file_token': 'boxcnH7iSLRxltn9bguJIWr1Vxf',
-    #         'name': 'image.png',
-    #         'type': 'image/png',
-    #         'size': 865947,
-    #         'url': 'https://open.feishu.cn/open-apis/drive/v1/medias/boxcnH7iSLRxltn9bguJIWr1Vxf/download',
-    #         'tmp_url': 'https://open.feishu.cn/open-apis/drive/v1/medias/batch_get_tmp_download_url?file_tokens=boxcnH7iSLRxltn9bguJIWr1Vxf'}],
         "片名":name,
     }
-    return content
+    return content, pic_url
+
 
 
 class NewMovie:
@@ -78,7 +87,8 @@ class DoubanModule:
         if content.startswith('甜甜看片'):
             c = MessageApiClient()
             url = content.split(sep=' ')[1]
-            detail = douban_info(url)
+            detail, img_url = douban_info(url)
+            detail['海报']=[{"file_token": c.upload_medias(img_url)}]
             c.new_bittable_records('bascn8PCizNlokom09WfnN89O3b','tblMha0FYWopst7m', detail)
             return '已添加'
  

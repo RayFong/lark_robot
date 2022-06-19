@@ -51,6 +51,33 @@ class MessageApiClient(object):
         MessageApiClient._check_error_response(resp)
         return resp.json()['data']['image_key']
 
+    def upload_medias(self, media_url):
+        self._authorize_tenant_access_token()
+        url = f'{self._lark_host}/open-apis/drive/v1/medias/upload_all'
+        headers = {
+            #'Content-Type': 'multipart/form-data',
+            "Authorization": "Bearer " + self.tenant_access_token,
+        }
+        # print(headers)
+
+        media_data = requests.get(media_url).content
+        with open('/tmp/sample.jpg', 'wb') as fp:
+            fp.write(media_data)
+        files=[
+          ('file',('sample.jpg', open('/tmp/sample.jpg','rb'),'image/jpeg'))
+        ]
+        size = str(len(media_data))
+        payload={
+            'file_name':'sample.jpg',
+            'parent_type':'bitable_image',
+            'parent_node':'bascn8PCizNlokom09WfnN89O3b',
+            'size': size,
+        }
+        resp = requests.post(url=url, headers=headers, files=files, data=payload)
+        # print(resp.content)
+        MessageApiClient._check_error_response(resp)
+        return resp.json()['data']['file_token']
+
 
     def send(self, receive_id_type, receive_id, msg_type, content):
         # send message to user, implemented based on Feishu open api capability. doc link: https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/create
