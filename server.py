@@ -1,14 +1,12 @@
 #!/usr/bin/env python3.8
 
 import json
-import os
-import random
 import logging
 import requests
-import re
 from api import MessageApiClient, VERIFICATION_TOKEN, ENCRYPT_KEY
 from event import MessageReceiveEvent, UrlVerificationEvent, EventManager
 from flask import Flask, jsonify
+import threading
 
 import chat_module
 
@@ -44,18 +42,12 @@ def reply(content):
             print(e)
             return f'Exception: {e}'
 
-    return '没有回答了' 
+    return '没有回答了'
 
-@event_manager.register("im.message.receive_v1")
-def message_receive_event_handler(req_data: MessageReceiveEvent):
+def processReceiveEvent(req_data: MessageReceiveEvent):
     sender_id = req_data.event.sender.sender_id
     message = req_data.event.message
-    if message.message_type != "text":
-        logging.warn("Other types of messages have not been processed yet")
-        return jsonify()
-        # get open_id and text_content
     open_id = sender_id.open_id
-    chat_id = message.chat_id
     print(message.content, message.chat_id, message.chat_type)
 	
     content = json.loads(message.content)['text']
@@ -67,6 +59,16 @@ def message_receive_event_handler(req_data: MessageReceiveEvent):
         message_api_client.reply_text_message(message.message_id, text_content )
     else:    
         message_api_client.send_text_with_open_id(open_id, text_content)
+
+@event_manager.register("im.message.receive_v1")
+def message_receive_event_handler(req_data: MessageReceiveEvent):
+    message = req_data.event.message
+    if message.message_type != "text":
+        logging.warn("Other types of messages have not been processed yet")
+        return jsonify()
+
+    thr = threading.Thread(target=processReceiveEvent, args=req_data)
+    thr.start()
     return jsonify()
 
 

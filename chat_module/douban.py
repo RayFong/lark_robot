@@ -1,5 +1,3 @@
-from distutils.file_util import move_file
-import re
 from bs4 import BeautifulSoup
 import requests
 from api import MessageApiClient
@@ -59,10 +57,6 @@ class DoubanModule:
             detail['海报']=[{"file_token": c.upload_medias(img_url)}]
             c.new_bittable_records('bascn8PCizNlokom09WfnN89O3b','tblMha0FYWopst7m', detail)
             return f'已添加《{detail["片名"]}》'
- 
-            
-
-
 
 if __name__ == '__main__':
     m = DoubanModule()
