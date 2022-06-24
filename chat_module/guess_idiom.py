@@ -170,8 +170,6 @@ class GuessIdiomModule:
             match, result = idiom_guess(self.guesser, content)
             if match:
                 return result
-            else:
-                return '当前还在猜成语呢, ' + result
 
         return None
 
