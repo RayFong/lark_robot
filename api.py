@@ -51,7 +51,7 @@ class MessageApiClient(object):
         MessageApiClient._check_error_response(resp)
         return resp.json()['data']['image_key']
 
-    def upload_medias(self, media_url):
+    def upload_medias(self, media_url, parent_node='bascn8PCizNlokom09WfnN89O3b'):
         self._authorize_tenant_access_token()
         url = f'{self._lark_host}/open-apis/drive/v1/medias/upload_all'
         headers = {
@@ -70,7 +70,7 @@ class MessageApiClient(object):
         payload={
             'file_name':'sample.jpg',
             'parent_type':'bitable_image',
-            'parent_node':'bascn8PCizNlokom09WfnN89O3b',
+            'parent_node': parent_node,
             'size': size,
         }
         resp = requests.post(url=url, headers=headers, files=files, data=payload)

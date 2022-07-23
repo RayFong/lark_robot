@@ -1,6 +1,6 @@
 # lark_robot
 
-this is a repository builded by my little-cute and me. these apps are implemented by lark-feishu-api.
+This is a repository builded by my little-cute and me. these apps are implemented by lark-feishu-api.
 
 ## 发布ROBOT
 
@@ -25,3 +25,7 @@ this is a repository builded by my little-cute and me. these apps are implemente
 * `xiache.py`: 知乎
 * `weather.py`: 获取天气的代码
 * `crawer`: 一些爬虫相关代码
+* chatter.py: 笨笨的聊天机器人
+* douban.py: 获取豆瓣电影信息
+* podcast.py: 获取小宇宙播客信息
+* guess_idiom.py: handle汉兜猜成语的代码，三次就能猜对答案
