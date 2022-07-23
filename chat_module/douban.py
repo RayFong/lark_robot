@@ -1,22 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
-from api import MessageApiClient
+from api import *
 
-douban_hint = '请输入豆瓣电影的链接。'
 
 headers = {
     'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36 Edg/102.0.1245.39',
 }
-
-
-def upload_image_to_feishu(image_path: str):
-    try:
-        data = requests.get(image_path).content
-        with open('/tmp/sample.jpg', 'wb') as fp:
-            fp.write(data)
-        return message_api_client.upload_image('/tmp/sample.jpg')
-    except:
-        return 'img_v2_868f1042-efb9-4973-93db-9c71f1015a6g'
 
 
 def douban_info(url):
@@ -56,7 +45,7 @@ class DoubanModule:
             detail, img_url = douban_info(url)
             detail['海报']=[{"file_token": c.upload_medias(img_url)}]
             c.new_bittable_records('bascn8PCizNlokom09WfnN89O3b','tblMha0FYWopst7m', detail)
-            return f'已添加《{detail["片名"]}》'
+            return f'已添加《{detail["片名"]}》: {MOIVE_DOC_URL}'
 
 if __name__ == '__main__':
     m = DoubanModule()
