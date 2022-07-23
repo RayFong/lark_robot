@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from api import MessageApiClient
+from api import PODCAST_URL, MessageApiClient
 
 podcast_hint = '请输入小宇宙播客的链接。'
 podcast_feishu_node_id = 'bascnLfGfmHxVcpx7tbJK4gWkGf'
@@ -62,7 +62,7 @@ class PodcastModule:
             detail['单集封面']=[{"file_token": c.upload_medias(ep_img_url, parent_node=podcast_feishu_node_id)}]
             detail['播客封面']=[{"file_token": c.upload_medias(pod_img_url, parent_node=podcast_feishu_node_id)}]
             c.new_bittable_records(podcast_feishu_node_id,'tblNZSZ8iu2Yp8ry', detail)
-            return f'已添加《{detail["单集名称"]}》'
+            return f'已添加《{detail["单集名称"]}》：{PODCAST_URL}'
 
 if __name__ == '__main__':
     m = PodcastModule()

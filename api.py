@@ -12,6 +12,7 @@ VERIFICATION_TOKEN = os.getenv("VERIFICATION_TOKEN")
 ENCRYPT_KEY = os.getenv("ENCRYPT_KEY")
 LARK_HOST = os.getenv("LARK_HOST")
 MOIVE_DOC_URL = os.getenv("MOIVE_DOC_URL")
+PODCAST_URL = os.getenv("PODCAST_URL")
 
 # const
 TENANT_ACCESS_TOKEN_URI = "/open-apis/auth/v3/tenant_access_token/internal"
